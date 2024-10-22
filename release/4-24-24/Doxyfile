@@ -1,0 +1,2 @@
+OUTPUT_DIRECTORY = /home/agge/projects/sfml/occ-accessibility-tour/debug/doc
+INPUT = /home/agge/projects/sfml/occ-accessibility-tour/src/ /home/agge/projects/sfml/occ-accessibility-tour/include/ /home/agge/projects/sfml/occ-accessibility-tour/doc/

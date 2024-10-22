@@ -1,0 +1,5 @@
+/home/agge/projects/sfml/occ-accessibility-tour/debug/CMakeFiles/occ-accessibility-tour.dir
+/home/agge/projects/sfml/occ-accessibility-tour/debug/CMakeFiles/testing.dir
+/home/agge/projects/sfml/occ-accessibility-tour/debug/CMakeFiles/doc_doxygen.dir
+/home/agge/projects/sfml/occ-accessibility-tour/debug/CMakeFiles/edit_cache.dir
+/home/agge/projects/sfml/occ-accessibility-tour/debug/CMakeFiles/rebuild_cache.dir
