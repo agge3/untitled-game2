@@ -10,7 +10,6 @@
   6. <code>./occ-accessibility-tour</code>
 
 ## Credit: 
-Professor Cole, Mentor<br>
 [SFML](https://www.sfml-dev.org/)<br>
 Documentation auto-generated with Doxygen<br>
 
