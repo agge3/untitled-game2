@@ -13,10 +13,7 @@
 MenuState::MenuState(StateStack& stack, Context context) :
     State(stack, context),
     m_options(),
-    m_options_index(0),
-    _stt(std::make_unique<stt::SpeechToText>()),
-    _stt_start(true),
-    _th()
+    m_options_index(0)
 {
     // get title screen from context, already in mem, don't need to recreate
     m_background_sprite.setTexture(context.textures->get(
@@ -87,35 +84,6 @@ void MenuState::draw()
  */
 bool MenuState::update(sf::Time delta_time)
 {
-    //if (_stt_start) {
-    //    _th = std::thread ([this]() { _stt->run(); });
-    //    _th.detach();
-    //    _stt_start = false;
-    //}
-
-    // stt handling
-    // @note stt is in update loop, to circumvent handle_event() - should take
-    // higher precedence (like realtime input)
-    //if (!_stt->key_queue_is_empty()) {
-    //    _stt_key = _stt->get_key();
-    //    if (_stt_key == stt::Key::Play) {
-    //        _stt->clear();
-    //        std::cout << "Stopping SpeechToText...\n";
-    //        _stt.reset();
-    //        //pthread_cancel(_th.native_handle());
-    //        //std::cout << "SpeechToText Linux pthread killed.\n";
-    //        //request_pop_stack();
-    //        std::cout << "Requesting GameState...\n";
-    //        request_push_stack(States::Game);
-    //    } else if (_stt_key == stt::Key::Exit) {
-    //        request_pop_stack();
-    //    } else {
-    //        // @note maybe not necessary, because new key will be popped, but
-    //        // just in case...!
-    //        _stt_key == stt::Key::None;
-    //    }
-    //}
-
     return true;
 }
 

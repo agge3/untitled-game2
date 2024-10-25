@@ -20,7 +20,7 @@ if(TARGET_SYSTEM_WIN32)
 endif()
 
 # project name, description, & lang
-project(occ-accessibility-tour
+project(untitled-game2
     DESCRIPTION "It's an untitled game"
     LANGUAGES CXX)
 # set version numbers
@@ -29,9 +29,8 @@ set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
 
 # declare exe
-add_executable(occ-accessibility-tour)
+add_executable(untitled-game2)
 add_executable(testing)
-#add_library(imgui-sfml)
 
 target_sources(testing PRIVATE src/testing.cpp
     # imgui dep
@@ -44,7 +43,7 @@ target_sources(testing PRIVATE src/testing.cpp
     )
 
 # add src files to target
-target_sources(occ-accessibility-tour PRIVATE src/main.cpp
+target_sources(untitled-game2 PRIVATE src/main.cpp
     src/utility.cpp
     src/debug.cpp
     src/app.cpp
@@ -74,8 +73,6 @@ target_sources(occ-accessibility-tour PRIVATE src/main.cpp
     src/pickup.cpp
     src/task-thread.cpp
     src/map-asset.cpp
-    # compile stt into occ-accessibility tour
-    stt/src/speech-to-text.cpp
     # imgui style config
     src/imguistyle.cpp
     # imgui dep
@@ -88,15 +85,6 @@ target_sources(occ-accessibility-tour PRIVATE src/main.cpp
     dep/imgui-sfml/imgui-SFML.cpp
     )
 #[[
-
-    # imgui dep
-    dep/imgui/imgui.cpp
-    dep/imgui/imgui_widgets.cpp
-    dep/imgui/imgui_draw.cpp
-    dep/imgui/imgui_tables.cpp
-    # imgui-sfml dep
-    dep/imgui-sfml/imgui-SFML.cpp
-    )
 
 target_sources(imgui-sfml PUBLIC
     # imgui dep
@@ -114,28 +102,20 @@ target_sources(imgui-sfml PUBLIC
 # link sfml static lib
 #set(SFML_STATIC_LIBRARIES TRUE)
 if(TARGET_SYSTEM_LINUX)
-    target_include_directories(occ-accessibility-tour PRIVATE
+    target_include_directories(untitled-game2 PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/include/")
-    target_link_directories(occ-accessibility-tour PRIVATE
+    target_link_directories(untitled-game2 PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/")
     set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/cmake/SFML")
-    target_include_directories(occ-accessibility-tour PRIVATE
-        "${CMAKE_SOURCE_DIR}/stt/include/stt/")
-    #target_link_directories(occ-accessibility-tour PRIVATE
-    #    "${CMAKE_SOURCE_DIR}/voice/lib/stt/")
-    target_include_directories(occ-accessibility-tour PRIVATE
-        "${CMAKE_SOURCE_DIR}/stt/lib/deepspeech/")
-    target_link_directories(occ-accessibility-tour PRIVATE
-        "${CMAKE_SOURCE_DIR}/stt/lib/deepspeech/")
 
     # for linux system headers
-    target_include_directories(occ-accessibility-tour PRIVATE
+    target_include_directories(untitled-game2 PRIVATE
         "/usr/include/")
 
 elseif(TARGET_SYSTEM_WIN32)
-    target_include_directories(occ-accessibility-tour PRIVATE
+    target_include_directories(untitled-game2 PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/include/")
-    target_link_directories(occ-accessibility-tour PRIVATE
+    target_link_directories(untitled-game2 PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/")
     set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/cmake/SFML")
 endif()
@@ -143,11 +123,11 @@ endif()
 find_package(SFML COMPONENTS network graphics window system REQUIRED)
 
 # link dependencies (imgui & imgui-sfml)
-target_include_directories(occ-accessibility-tour PRIVATE
+target_include_directories(untitled-game2 PRIVATE
     "${CMAKE_SOURCE_DIR}/dep/imgui/")
-target_include_directories(occ-accessibility-tour PRIVATE
+target_include_directories(untitled-game2 PRIVATE
     "${CMAKE_SOURCE_DIR}/dep/imgui-sfml")
-#target_link_directories(occ-accessibility-tour PRIVATE
+#target_link_directories(untitled-game2 PRIVATE
 #    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml/lib")
 
 # link sfml static lib
@@ -198,8 +178,7 @@ target_link_libraries(imgui-sfml PUBLIC
 #    "/usr/lib/")
 #target_include_directories(testing PRIVATE
 #    "/usr/include/GL")
-target_link_libraries(occ-accessibility-tour PRIVATE
-    #sfml-audio-s
+target_link_libraries(untitled-game2 PRIVATE
     #openal32
     #flac
     #vorbisenc
@@ -213,9 +192,8 @@ target_link_libraries(occ-accessibility-tour PRIVATE
     sfml-system
     OpenGL
     GL
-    sfml-audio
-    #stt
-    deepspeech
+    #imgui
+    #imgui-sfml
     #opengl32
     #freetype
     #winmm
@@ -226,22 +204,22 @@ target_link_libraries(occ-accessibility-tour PRIVATE
     )
 
 # target include/.h
-target_include_directories(occ-accessibility-tour PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(untitled-game2 PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # target features & options
-target_compile_features(occ-accessibility-tour PRIVATE cxx_std_20)
+target_compile_features(untitled-game2 PRIVATE cxx_std_20)
 # m_contextdebug and release g++ flags
 set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
 #set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall")
 
 # copy res/lib/dep into build dir, for exec root access
-add_custom_command(TARGET occ-accessibility-tour PRE_BUILD
+add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:occ-accessibility-tour>)
+        ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:untitled-game2>)
 # copy scripts into build dir
-add_custom_command(TARGET occ-accessibility-tour PRE_BUILD
+add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:occ-accessibility-tour>)
+        ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:untitled-game2>)
 
 # build doc with doxygen
 # to only build doc for release mode...
@@ -281,9 +259,10 @@ target_link_libraries(testing PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    openal
     OpenGL
     GL
+    imgui
+    imgui-sfml
     #libgl
     #imgui
     #-lOpenGL32
