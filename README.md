@@ -12,7 +12,6 @@
 ## Credit: 
 Professor Cole, Mentor<br>
 [SFML](https://www.sfml-dev.org/)<br>
-[Mozilla's DeepSpeech C API](https://deepspeech.readthedocs.io/en/latest/C-API.html)<br>
 Documentation auto-generated with Doxygen<br>
 
 ## Authors:
