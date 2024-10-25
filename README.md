@@ -1,13 +1,5 @@
-# OCC Accessibility Tour
-## Gile's T. Brown Research Symposium
-
-The normal video game controls of mouse and keyboard (or controller) are entirely exclusive to people of ability. Welcome OCC Accessibility Tour, where we
-aim to bridge that gap, and unite video gaming with people from all abilities. With a modular library set, we have created a game that can be played entirely
-by voice alone. 
-
-In its current state, it is a creative rendition of Orange Coast College's Map, where the player, Pete the Pirate, can explore OCC.
-
-The design is to have the library set up in a way that it can be ported to any game.
+# Untitled Game 2
+## Currently in the process of clean-up and restart for new game implementation.
 
 ### To compile (currently Linux only)
   1. Clone into the repository
