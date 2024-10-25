@@ -1,4 +1,4 @@
-#[[include(FetchContent)
+include(FetchContent)
 
 message(STATUS "Fetching dependencies...")
 
@@ -34,4 +34,3 @@ FetchContent_Declare(
     GIT_TAG origin/2.6.x
     )
 add_subdirectory(imgui-sfml)
-]]

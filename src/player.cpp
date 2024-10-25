@@ -35,8 +35,7 @@ struct PlayerMover {
  * constructor.
  */
 Player::Player() :
-    m_current_level_status(InProgress),
-    _stt(std::make_unique<stt::SpeechToText>())
+    m_current_level_status(InProgress)
 {
     /// Try to set default keyboard keybindings.
     try {
@@ -55,24 +54,6 @@ Player::Player() :
         /// Catch exception and print error message.
         std::cerr << "\n EXCEPTION: " << e.what() <<
             ". Failed to set default player keyboard keybindings.\n"
-            << std::endl;
-    }
-
-    /// Try to set default SpeechToText keybindings.
-    try {
-        _sttbinding[stt::Key::Up] = STTMoveUp;
-        std::cout << "Player keybind: Move up = SpeechToText \"Up\"\n";
-        _sttbinding[stt::Key::Down] = STTMoveDown;
-        std::cout << "Player keybind: Move down = SpeechToText \"Down\"\n";
-        _sttbinding[stt::Key::Left] = STTMoveLeft;
-        std::cout << "Player keybind: Move left = SpeechToText \"Left\"\n";
-        _sttbinding[stt::Key::Right] = STTMoveRight;
-        std::cout << "Player keybind: Move right = SpeechToText \"Right\"\n";
-
-    } catch (std::exception& e) {
-        /// Catch exception and print error message.
-        std::cerr << "\n EXCEPTION: " << e.what() <<
-            ". Failed to set default player SpeechToText keybindings."
             << std::endl;
     }
 
@@ -116,20 +97,6 @@ void Player::handle_realtime_input(CommandQueue& commands)
             // uncomment to print detection of realtime input
             //std::cout << "Realtime input detected!\n";
             commands.push(m_actionbinding[pair.second]);
-        }
-    }
-}
-
-void Player::handle_stt_input(CommandQueue& commands)
-{
-    if (!_stt->key_queue_is_empty()) {
-        _stt_key = _stt->get_key();
-        for (auto pair : _sttbinding) {
-            if (_stt_key == pair.first && is_realtime_action(pair.second)) {
-                // print detection of stt input
-                std::cout << "Speech to text input detected!\n";
-                commands.push(m_actionbinding[pair.second]);
-            }
         }
     }
 }
@@ -188,20 +155,6 @@ void Player::initialize_actions() {
             PlayerMover(+5.f, 0.f));
     std::cout << "Player action initialized: Move right\n";
 
-    // STT actions:
-    m_actionbinding[STTMoveUp].action = derived_action<Creature>(
-            PlayerMover(0.f, -250.f));
-    std::cout << "Player SpeechToText action initialized: Move up\n";
-	m_actionbinding[STTMoveDown].action = derived_action<Creature>(
-            PlayerMover(0.f, +250.f));
-    std::cout << "Player SpeechToText action initialized: Move down\n";
-    m_actionbinding[STTMoveLeft].action = derived_action<Creature>(
-            PlayerMover(-250.f, 0.f));
-    std::cout << "Player SpeechToText action initialized: Move left\n";
-	m_actionbinding[STTMoveRight].action = derived_action<Creature>(
-            PlayerMover(+250.f, 0.f));
-    std::cout << "Player SpeechToText action initialized: Move right\n";
-
     // attack actions...
     // std::bind binds the para "_1" to always be the para for &attack ...
     // -> Creature::attack(std::placeholders::_1);
@@ -226,10 +179,6 @@ bool Player::is_realtime_action(Action action)
     case MoveLeft:
     case MoveRight:
     case MagicAttack:
-    case STTMoveUp:
-    case STTMoveDown:
-    case STTMoveLeft:
-    case STTMoveRight:
         return true;
         break;
     // if not explicitly defined as real-time, return false -> don't handle
@@ -255,17 +204,4 @@ void Player::set_level_status(LevelStatus status)
 Player::LevelStatus Player::get_level_status() const
 {
     return m_current_level_status;
-}
-
-void Player::run_stt()
-{
-    _stt_task.async([this]() { _stt->run(); });
-}
-
-bool Player::is_stt_running()
-{
-    if (!_stt_task.async_is_finished())
-        return true;
-
-    return false;
 }

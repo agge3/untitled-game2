@@ -358,11 +358,7 @@ void Creature::update_texts()
         break;
     case Creature::Mbcc:
         m_health_display->set_string(
-<<<<<<< HEAD
                 "Mathematics Business & Computing Center");
-=======
-                "Mathematics Business & Computer Center");
->>>>>>> 70358e4573c4f036ca0905dffe86c5741d7fd904
         m_health_display->setPosition(0.f, 553.f);
         break;
     case Creature::Maintenance:
