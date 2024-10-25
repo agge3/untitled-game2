@@ -6,13 +6,10 @@
 GameState::GameState(StateStack& stack, Context context) :
     State(stack, context),
     m_world(*context.window, *context.fonts),
-    m_player(*context.player),
-    _stt_start(true)
+    m_player(*context.player)
 {
     // print successful state creation
     std::cout << "Game state created!\n";
-    //std::thread _stt_thread(&stt_thread);
-    //_stt_thread.detach();
 }
 
 void GameState::draw()
@@ -22,22 +19,11 @@ void GameState::draw()
 
 bool GameState::update(sf::Time delta_time)
 {
-    // xxx game state is updating, meaning stt should be running...
-    // run on separate thread and don't run again until thread has completed
-    if (_stt_start) {
-        m_player.run_stt();
-        std::cout << "Creating thread...\n";
-        _stt_start = false;
-    }
-
     /// Update and realtime input done in same update cycle of game state.
     m_world.update(delta_time);
     /// Get commands from command queue, then handle input.
     CommandQueue& commands = m_world.get_command_queue();
     m_player.handle_realtime_input(commands);
-    m_player.handle_stt_input(commands);
-    // uncomment to print if game update loop is handling realtime input
-    //std::cout << "Game update loop: Receiving realtimesttt!\n";
 
     return true;
 }
@@ -51,10 +37,6 @@ bool GameState::handle_event(const sf::Event& event)
     /// If escape pressed, push pause state as current state.
     if (event.type == sf::Event::KeyPressed
             && event.key.code == sf::Keyboard::Escape) {
-        /** @brief Clear SpeechToText context, new context will be used each 
-         * time game state becomes the active state. */
-        //m_player.clear_stt();
-
         request_push_stack(States::Pause);
     }
 

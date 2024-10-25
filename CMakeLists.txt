@@ -31,7 +31,6 @@ set(VERSION_PATCH 0)
 # declare exe
 add_executable(occ-accessibility-tour)
 add_executable(testing)
-#add_library(imgui-sfml)
 
 target_sources(testing PRIVATE src/testing.cpp
     # imgui dep
@@ -74,8 +73,6 @@ target_sources(occ-accessibility-tour PRIVATE src/main.cpp
     src/pickup.cpp
     src/task-thread.cpp
     src/map-asset.cpp
-    # compile stt into occ-accessibility tour
-    stt/src/speech-to-text.cpp
     # imgui style config
     src/imguistyle.cpp
     # imgui dep
@@ -88,15 +85,6 @@ target_sources(occ-accessibility-tour PRIVATE src/main.cpp
     dep/imgui-sfml/imgui-SFML.cpp
     )
 #[[
-
-    # imgui dep
-    dep/imgui/imgui.cpp
-    dep/imgui/imgui_widgets.cpp
-    dep/imgui/imgui_draw.cpp
-    dep/imgui/imgui_tables.cpp
-    # imgui-sfml dep
-    dep/imgui-sfml/imgui-SFML.cpp
-    )
 
 target_sources(imgui-sfml PUBLIC
     # imgui dep
@@ -119,14 +107,6 @@ if(TARGET_SYSTEM_LINUX)
     target_link_directories(occ-accessibility-tour PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/")
     set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/cmake/SFML")
-    target_include_directories(occ-accessibility-tour PRIVATE
-        "${CMAKE_SOURCE_DIR}/stt/include/stt/")
-    #target_link_directories(occ-accessibility-tour PRIVATE
-    #    "${CMAKE_SOURCE_DIR}/voice/lib/stt/")
-    target_include_directories(occ-accessibility-tour PRIVATE
-        "${CMAKE_SOURCE_DIR}/stt/lib/deepspeech/")
-    target_link_directories(occ-accessibility-tour PRIVATE
-        "${CMAKE_SOURCE_DIR}/stt/lib/deepspeech/")
 
     # for linux system headers
     target_include_directories(occ-accessibility-tour PRIVATE
@@ -199,7 +179,6 @@ target_link_libraries(imgui-sfml PUBLIC
 #target_include_directories(testing PRIVATE
 #    "/usr/include/GL")
 target_link_libraries(occ-accessibility-tour PRIVATE
-    #sfml-audio-s
     #openal32
     #flac
     #vorbisenc
@@ -213,9 +192,8 @@ target_link_libraries(occ-accessibility-tour PRIVATE
     sfml-system
     OpenGL
     GL
-    sfml-audio
-    #stt
-    deepspeech
+    #imgui
+    #imgui-sfml
     #opengl32
     #freetype
     #winmm
@@ -281,9 +259,10 @@ target_link_libraries(testing PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    openal
     OpenGL
     GL
+    imgui
+    imgui-sfml
     #libgl
     #imgui
     #-lOpenGL32
