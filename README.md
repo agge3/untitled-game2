@@ -9,12 +9,6 @@
   5. <code>make occ-accessibility-tour</code>
   6. <code>./occ-accessibility-tour</code>
 
-### Things to do:
-  - Cross-compatibility
-  - Menu voice operations
-  - Continuous speech transmission & translation
-  - Decide on whether to continue the current game, or create a better game suited to the task
-
 ## Credit: 
 Professor Cole, Mentor<br>
 [SFML](https://www.sfml-dev.org/)<br>
