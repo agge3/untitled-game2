@@ -1,4 +1,4 @@
-#define SFML_STATIC
+#include <gtest/gtest.h>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -7,12 +7,14 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-int main() {
+int imgui_sfml_test()
+{
     sf::RenderWindow window(sf::VideoMode(1280, 720), "testing");
     window.setFramerateLimit(60);
     window.setView(window.getDefaultView());
-    if (!ImGui::SFML::Init(window))
-        return 1;
+    if (!ImGui::SFML::Init(window)) {
+        return -1;
+	}
     ImGui::StyleColorsLight();
     ImVec2 sfml_view(window.getView().getSize().x,
             window.getView().getSize().y);
@@ -42,4 +44,11 @@ int main() {
         window.display();
     }
     ImGui::SFML::Shutdown();
+	return 0;
+}
+
+int main(int argc, char **argv)
+{
+	::testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
 }

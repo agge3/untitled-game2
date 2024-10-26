@@ -1,9 +1,6 @@
-[submodule "voice/voice/dep/DeepSpeech"]
-	path = voice/voice/dep/DeepSpeech
-	url = https://github.com/mozilla/DeepSpeech.git
 [submodule "dep/imgui"]
 	path = dep/imgui
-	url = https://github.com/ocornut/imgui.git
+	url = git@github.com:agge3/imgui.git
 [submodule "dep/imgui-sfml"]
 	path = dep/imgui-sfml
-	url = https://github.com/SFML/imgui-sfml.git
+	url = git@github.com:agge3/imgui-sfml.git
