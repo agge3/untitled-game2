@@ -1,6 +1,6 @@
 [submodule "dep/imgui"]
 	path = dep/imgui
-	url = https://github.com/ocornut/imgui.git
+	url = https://github.com/agge3/imgui.git
 [submodule "dep/imgui-sfml"]
 	path = dep/imgui-sfml
-	url = https://github.com/SFML/imgui-sfml.git
+	url = https://github.com/agge3/imgui-sfml.git
