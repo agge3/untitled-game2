@@ -1,10 +1,10 @@
-# cmake tested versions
-cmake_minimum_required(VERSION 3.22...3.27)
+# Tested CMake versions:
+cmake_minimum_required(VERSION 3.14...3.27)
 
 set(TARGET_SYSTEM_LINUX TRUE)
 set(TARGET_SYSTEM_WIN32 FALSE)
 
-if(TARGET_SYSTEM_WIN32)
+if (TARGET_SYSTEM_WIN32)
     # target os: Windows
     set(CMAKE_SYSTEM_NAME Windows)
     # use x86 win64 mingw32 gcc & g++ compiler
@@ -19,30 +19,42 @@ if(TARGET_SYSTEM_WIN32)
     set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 endif()
 
-# project name, description, & lang
+# Project name, description, language, etc.
 project(untitled-game2
     DESCRIPTION "It's an untitled game"
     LANGUAGES CXX)
-# set version numbers
+
+# Use CXX 17+.
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Version numbers:
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 
-# declare exe
+# Testing framework.
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+FetchContent_MakeAvailable(googletest)
+enable_testing()
+
+# Executable(s):
 add_executable(untitled-game2)
-add_executable(testing)
 
-target_sources(testing PRIVATE src/testing.cpp
-    # imgui dep
-    dep/imgui/imgui.cpp
-    dep/imgui/imgui_draw.cpp
-    dep/imgui/imgui_demo.cpp
-    dep/imgui/imgui_tables.cpp
-    dep/imgui/imgui_widgets.cpp
-    dep/imgui-sfml/imgui-SFML.cpp
-    )
+# Target(s) features and options.
+#target_compile_features(untitled-game2 PRIVATE cxx_std_20)
 
-# add src files to target
+# Debug build compiler flags.
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
+
+# Release build compiler flags.
+set(CMAKE_CXX_FLAGS_RELEASE_INIT "")
+
+# Add source files to target(s).
 target_sources(untitled-game2 PRIVATE src/main.cpp
     src/utility.cpp
     src/debug.cpp
@@ -84,24 +96,19 @@ target_sources(untitled-game2 PRIVATE src/main.cpp
     # imgui sfml backend dep
     dep/imgui-sfml/imgui-SFML.cpp
     )
-#[[
 
-target_sources(imgui-sfml PUBLIC
-    # imgui dep
-    dep/imgui/imgui.cpp
-    dep/imgui/imgui_widgets.cpp
-    dep/imgui/imgui_draw.cpp
-    dep/imgui/imgui_tables.cpp
-    # imgui-sfml dep
-    dep/imgui-sfml/imgui-SFML.cpp
-    )
-
-]]
-#set(BUILD_SHARED_LIBS OFF) # build static lib
-
-# link sfml static lib
-#set(SFML_STATIC_LIBRARIES TRUE)
-if(TARGET_SYSTEM_LINUX)
+# Add include directories to target(s).
+# Local include directory.
+target_include_directories(untitled-game2 PRIVATE 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)
+# Library include directories.
+target_include_directories(untitled-game2 PRIVATE
+    "${CMAKE_SOURCE_DIR}/dep/imgui/")
+target_include_directories(untitled-game2 PRIVATE
+    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml")
+# Platform specific include directories.
+if (TARGET_SYSTEM_LINUX)
     target_include_directories(untitled-game2 PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/include/")
     target_link_directories(untitled-game2 PRIVATE
@@ -111,8 +118,7 @@ if(TARGET_SYSTEM_LINUX)
     # for linux system headers
     target_include_directories(untitled-game2 PRIVATE
         "/usr/include/")
-
-elseif(TARGET_SYSTEM_WIN32)
+elseif (TARGET_SYSTEM_WIN32)
     target_include_directories(untitled-game2 PRIVATE
         "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/include/")
     target_link_directories(untitled-game2 PRIVATE
@@ -120,65 +126,13 @@ elseif(TARGET_SYSTEM_WIN32)
     set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/cmake/SFML")
 endif()
 
+# Find packages necessary for linking.
 find_package(SFML COMPONENTS network graphics window system REQUIRED)
 
-# link dependencies (imgui & imgui-sfml)
-target_include_directories(untitled-game2 PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui/")
-target_include_directories(untitled-game2 PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml")
-#target_link_directories(untitled-game2 PRIVATE
-#    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml/lib")
-
-# link sfml static lib
-#set(SFML_STATIC_LIBRARIES TRUE)
-if(TARGET_SYSTEM_LINUX)
-    target_include_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/include/")
-    target_link_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/")
-    set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/cmake/SFML")
-elseif(TARGET_SYSTEM_WIN32)
-    target_include_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/include/")
-    target_link_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/")
-    set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/cmake/SFML")
-endif()
-find_package(SFML COMPONENTS network graphics window system REQUIRED)
-
-# link dependencies (imgui & imgui-sfml)
-target_include_directories(testing PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui/")
-target_include_directories(testing PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml")
-#target_link_directories(testing PRIVATE
-#    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml/lib")
-#[[target_include_directories(imgui-sfml PUBLIC
-    "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/include/")
-target_link_directories(imgui-sfml PUBLIC
-    "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/")
-set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/cmake/SFML")
-find_package(SFML COMPONENTS network graphics window system REQUIRED)
-
-target_link_libraries(imgui-sfml PUBLIC
-    ws2_32
-    sfml-graphics-s
-    sfml-window-s
-    sfml-system-s
-    opengl32
-    freetype
-    winmm
-    gdi32C
-    )
-]]
-# link lib to target
-#target_link_directories(testing PRIVATE
-#    "/usr/lib/")
-#target_include_directories(testing PRIVATE
-#    "/usr/include/GL")
-target_link_libraries(untitled-game2 PRIVATE
+# Link libraries to target(s).
+target_link_libraries(
+	untitled-game2
+	GTest::gtest_main
     #openal32
     #flac
     #vorbisenc
@@ -201,91 +155,39 @@ target_link_libraries(untitled-game2 PRIVATE
     #libimgui-sfml-d.a
     #-lOpenGL32
     #ImGui-SFML::ImGui-SFML
-    )
+)
 
-# target include/.h
-target_include_directories(untitled-game2 PRIVATE ${CMAKE_SOURCE_DIR}/include)
+include(GoogleTest)
+gtest_discover_tests(untitled-game2)
 
-# target features & options
-target_compile_features(untitled-game2 PRIVATE cxx_std_20)
-# m_contextdebug and release g++ flags
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
-#set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall")
-
-# copy res/lib/dep into build dir, for exec root access
+# Copy necessary directories into build directory, for executable root access.
 add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:untitled-game2>)
-# copy scripts into build dir
 add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:untitled-game2>)
 
-# build doc with doxygen
-# to only build doc for release mode...
-#if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
-#    # build doc
-#endif()
-option(BUILD_DOC "Build documentation" ON)
-# check if doxygen is installed
-find_package(Doxygen)
-if (DOXYGEN_FOUND)
-    # set input and output files
-    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-    # request to configure the file
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message(STATUS "Doxygen build started")
-    # NOTE: ALL builds doc together with app - all targets
-    add_custom_target(doc_doxygen ALL
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM)
-else (DOXYGEN_FOUND)
-    message(STATUS "Doxygen needs to be installed to generate doxygen documentation")
-endif (DOXYGEN_FOUND)
-
-# link lib to target
-target_link_libraries(testing PRIVATE
-    #sfml-audio-s
-    #openal32
-    #flac
-    #vorbisenc
-    #vorbisfile
-    #vorbis
-    #ogg
-    #sfml-network
-    sfml-graphics
-    sfml-window
-    sfml-system
-    OpenGL
-    GL
-    imgui
-    imgui-sfml
-    #libgl
-    #imgui
-    #-lOpenGL32
-    #ImGui-SFML::ImGui-SFML
-    )
-
-# target include/.h
-target_include_directories(testing PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
-# target features & options
-target_compile_features(testing PRIVATE cxx_std_20)
-# debug and release g++ flags
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
-#set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall")
-
-# copy res/lib/dep into build dir, for exec root access
-add_custom_command(TARGET testing PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:testing>)
-add_custom_command(TARGET testing PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/lib/ $<TARGET_FILE_DIR:testing>)
-# copy scripts into build dir
-add_custom_command(TARGET testing PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:testing>)
+# Build documentation with Doxygen.
+# Only build documentation for release build.
+if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
+	option(BUILD_DOC "Build documentation" ON)
+	# check if doxygen is installed
+	find_package(Doxygen)
+	if (DOXYGEN_FOUND)
+	    # set input and output files
+	    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
+	    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+	    # request to configure the file
+	    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+	    message(STATUS "Doxygen build started")
+	    # NOTE: ALL builds doc together with app - all targets
+	    add_custom_target(doc_doxygen ALL
+	        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+	        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	        COMMENT "Generating API documentation with Doxygen"
+	        VERBATIM)
+	else (DOXYGEN_FOUND)
+	    message(STATUS "Doxygen needs to be installed to generate doxygen documentation")
+	endif (DOXYGEN_FOUND)
+endif()
