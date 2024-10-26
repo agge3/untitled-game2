@@ -1,6 +1,6 @@
 [submodule "dep/imgui"]
 	path = dep/imgui
-	url = https://github.com/agge3/imgui.git
+	url = git@github.com:agge3/imgui.git
 [submodule "dep/imgui-sfml"]
 	path = dep/imgui-sfml
-	url = https://github.com/agge3/imgui-sfml.git
+	url = git@github.com:agge3/imgui-sfml.git
