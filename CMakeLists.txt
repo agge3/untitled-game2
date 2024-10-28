@@ -33,6 +33,7 @@ set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 
+# Add external libraries.
 # GTest testing framework.
 include(FetchContent)
 FetchContent_Declare(
@@ -40,9 +41,15 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
 FetchContent_MakeAvailable(googletest)
+enable_testing() # enable testing
 
-# Enable testing.
-#enable_testing()
+# Lua.
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/lib/Lua/")
+# GLog logger.
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/lib/glog")
+
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/lib/stdcapture")
+
 
 # Executable(s):
 add_executable(untitled-game2)
@@ -91,14 +98,14 @@ target_sources(untitled-game2 PRIVATE src/main.cpp
     src/map-asset.cpp
     # imgui style config
     src/imguistyle.cpp
-    # imgui dep
-    dep/imgui/imgui.cpp
-    dep/imgui/imgui_draw.cpp
-    dep/imgui/imgui_demo.cpp
-    dep/imgui/imgui_tables.cpp
-    dep/imgui/imgui_widgets.cpp
-    # imgui sfml backend dep
-    dep/imgui-sfml/imgui-SFML.cpp
+    # imgui external
+    external/lib/imgui/imgui.cpp
+    external/lib/imgui/imgui_draw.cpp
+    external/lib/imgui/imgui_demo.cpp
+    external/lib/imgui/imgui_tables.cpp
+    external/lib/imgui/imgui_widgets.cpp
+    # imgui sfml backend external
+    external/lib/imgui-sfml/imgui-SFML.cpp
 )
 target_sources(testing PRIVATE src/testing.cpp
     src/utility.cpp
@@ -132,14 +139,14 @@ target_sources(testing PRIVATE src/testing.cpp
     src/map-asset.cpp
     # imgui style config
     src/imguistyle.cpp
-    # imgui dep
-    dep/imgui/imgui.cpp
-    dep/imgui/imgui_draw.cpp
-    dep/imgui/imgui_demo.cpp
-    dep/imgui/imgui_tables.cpp
-    dep/imgui/imgui_widgets.cpp
-    # imgui sfml backend dep
-    dep/imgui-sfml/imgui-SFML.cpp
+    # imgui external
+    external/lib/imgui/imgui.cpp
+    external/lib/imgui/imgui_draw.cpp
+    external/lib/imgui/imgui_demo.cpp
+    external/lib/imgui/imgui_tables.cpp
+    external/lib/imgui/imgui_widgets.cpp
+    # imgui sfml backend external
+    external/lib/imgui-sfml/imgui-SFML.cpp
     )
 
 # Add include directories to target(s).
@@ -152,47 +159,53 @@ target_include_directories(testing PRIVATE
 )
 # Library include directories.
 target_include_directories(untitled-game2 PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui/"
+    "${CMAKE_SOURCE_DIR}/external/lib/imgui/"
 )
 target_include_directories(untitled-game2 PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml"
+    "${CMAKE_SOURCE_DIR}/external/lib/imgui-sfml"
+)
+target_include_directories(untitled-game2 PRIVATE
+    "${CMAKE_SOURCE_DIR}/external/lib/imgui-sfml"
 )
 target_include_directories(testing PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui/"
+    "${CMAKE_SOURCE_DIR}/external/lib/imgui/"
 )
 target_include_directories(testing PRIVATE
-    "${CMAKE_SOURCE_DIR}/dep/imgui-sfml"
+    "${CMAKE_SOURCE_DIR}/external/lib/imgui-sfml"
+)
+target_include_directories(testing PRIVATE
+    "${CMAKE_SOURCE_DIR}/external/lib/imgui-sfml"
 )
 # Platform specific include directories.
 if (TARGET_SYSTEM_LINUX)
     target_include_directories(untitled-game2 PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/include/")
+        "${CMAKE_SOURCE_DIR}/external/lib/linux/SFML-2.6.1/include/")
     target_link_directories(untitled-game2 PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/")
-    set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/cmake/SFML")
+        "${CMAKE_SOURCE_DIR}/external/lib/linux/SFML-2.6.1/lib/")
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/external/lib/linux/SFML-2.6.1/lib/cmake/SFML")
     # for linux system headers
     target_include_directories(untitled-game2 PRIVATE
         "/usr/include/")
 
     target_include_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/include/")
+        "${CMAKE_SOURCE_DIR}/external/lib/linux/SFML-2.6.1/include/")
     target_link_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/")
-    set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/linux/SFML-2.6.1/lib/cmake/SFML")
+        "${CMAKE_SOURCE_DIR}/external/lib/linux/SFML-2.6.1/lib/")
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/external/lib/linux/SFML-2.6.1/lib/cmake/SFML")
     # for linux system headers
     target_include_directories(testing PRIVATE
         "/usr/include/")
 elseif (TARGET_SYSTEM_WIN32)
     target_include_directories(untitled-game2 PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/include/")
+        "${CMAKE_SOURCE_DIR}/external/lib/SFML-2.6.1/include/")
     target_link_directories(untitled-game2 PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/")
-    set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/cmake/SFML")
+        "${CMAKE_SOURCE_DIR}/external/lib/SFML-2.6.1/lib/")
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/external/lib/SFML-2.6.1/lib/cmake/SFML")
     target_include_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/include/")
+        "${CMAKE_SOURCE_DIR}/external/lib/SFML-2.6.1/include/")
     target_link_directories(testing PRIVATE
-        "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/")
-    set(SFML_DIR "${CMAKE_SOURCE_DIR}/dep/SFML-2.6.1/lib/cmake/SFML")
+        "${CMAKE_SOURCE_DIR}/external/lib/SFML-2.6.1/lib/")
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/external/lib/SFML-2.6.1/lib/cmake/SFML")
 endif()
 
 # Find packages necessary for linking.
@@ -222,6 +235,8 @@ target_link_libraries(untitled-game2 PRIVATE
     #libimgui-sfml-d.a
     #-lOpenGL32
     #ImGui-SFML::ImGui-SFML
+	lua_static
+	glog::glog
 )
 target_link_libraries(testing PRIVATE
 	GTest::gtest_main
@@ -247,6 +262,9 @@ target_link_libraries(testing PRIVATE
     #libimgui-sfml-d.a
     #-lOpenGL32
     #ImGui-SFML::ImGui-SFML
+	lua_static
+	glog::glog
+	stdcapture
 )
 
 include(GoogleTest)
@@ -255,16 +273,16 @@ gtest_discover_tests(testing)
 # Copy necessary directories into build directory, for executable root access.
 add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:untitled-game2>)
+        ${CMAKE_SOURCE_DIR}/resources/ $<TARGET_FILE_DIR:untitled-game2>)
 add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:untitled-game2>)
 add_custom_command(TARGET testing PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:untitled-game2>)
-add_custom_command(TARGET testing PRE_BUILD
+        ${CMAKE_SOURCE_DIR}/resources/ $<TARGET_FILE_DIR:testing>)
+add_custom_command(TARGET untitled-game2 PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:untitled-game2>)
+        ${CMAKE_SOURCE_DIR}/scripts/ $<TARGET_FILE_DIR:testing>)
 
 # Build documentation with Doxygen.
 # Only build documentation for release build.

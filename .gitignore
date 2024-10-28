@@ -27,3 +27,4 @@ dep/deepspeech-models/kenlm-more-words.scorer
 dep/deepspeech-models/kenlm-less-words.scorer
 dep/deepspeech-models/kenlm-no-a.scorer
 dep/deepspeech-models/kenlm-only-keys.scorer
+tmp

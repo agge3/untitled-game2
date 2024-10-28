@@ -1,6 +1,24 @@
-[submodule "dep/imgui"]
-	path = dep/imgui
+[submodule "external/imgui"]
+	path = external/lib/imgui
 	url = git@github.com:agge3/imgui.git
-[submodule "dep/imgui-sfml"]
-	path = dep/imgui-sfml
+[submodule "external/imgui-sfml"]
+	path = external/lib/imgui-sfml
 	url = git@github.com:agge3/imgui-sfml.git
+[submodule "external/sol2"]
+	path = external/lib/sol2
+	url = git@github.com:agge3/sol2.git
+[submodule "external/Lua"]
+	path = external/lib/Lua
+	url = git@github.com:agge3/Lua.git
+[submodule "external/spdlog"]
+	path = external/lib/spdlog
+	url = git@github.com:agge3/spdlog.git
+[submodule "external/glog"]
+	path = external/lib/glog
+	url = git@github.com:agge3/glog.git
+[submodule "external/lib/gflags"]
+	path = external/lib/gflags
+	url = git@github.com:agge3/gflags.git
+[submodule "external/lib/stdcapture"]
+	path = external/lib/stdcapture
+	url = git@github.com:agge3/stdcapture.git
