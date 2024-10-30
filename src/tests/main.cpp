@@ -5,6 +5,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
+#include <sol2/sol2.hpp>
+
 #include <imgui.h>
 #include <imgui-SFML.h>
 
@@ -39,6 +41,40 @@ TEST(GLogTest, validate)
 {
 	std::string msg = "This is a test log message.";
 	EXPECT_TRUE(validateGlog(msg));
+}
+
+TEST(SFMLBackendFactory, create)
+{
+	SFMLBackendFactory factory;
+	std::unique_ptr<SFMLBackend> backend = factory.create();
+	std::unique_ptr<IWindow> window = backend->create_window();
+	std::unique_ptr<IRenderer> renderer = backend->create_renderer();
+	std::unique_ptr<IEventHandler> event_handler = backend->create_event_handler();
+
+	IEvent event = event_handler->create_event();
+	event_handler->poll_event(event);
+	if (event.type == Event::KeyPressed) {
+		std::cout << "KeyPressed event polled.\n";
+	}
+}
+
+int sol2_test()
+{
+	sol::state lua;
+	lua.open_libraries(sol::lib::base);
+
+	// integer types
+	lua.set("number", 24);
+	// floating point numbers
+	lua["number2"] = 24.5;
+	// string types
+	lua["important_string"] = "woof woof";
+	// is callable, therefore gets stored as a function that can be called
+	lua["a_function"] = []() { return 100; };
+	// make a table
+	lua["some_table"] = lua.create_table_with("value", 24);
+
+	return 0;
 }
 
 int imgui_sfml_test()

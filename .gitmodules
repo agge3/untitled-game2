@@ -22,3 +22,6 @@
 [submodule "external/lib/stdcapture"]
 	path = external/lib/stdcapture
 	url = git@github.com:agge3/stdcapture.git
+[submodule "external/lib/glm"]
+	path = external/lib/glm
+	url = git@github.com:agge3/glm.git
