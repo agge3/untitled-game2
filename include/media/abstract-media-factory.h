@@ -134,43 +134,31 @@ public:
 	virtual ~IEvent() = default;
 };
 
-class SFMLEvent : public IEvent
-{
-public:
-	sf::Event event;
-};
-
-class SDLEvent : public IEvent
-{
-public:
-	SDL_Event event;
-};
-
 class IEventHandler {
 	virtual ~IEventHandler() {}
-	virtual IEvent create_event() = 0;
-	virtual bool poll_event(IEvent &event) const = 0;
+	virtual std::optional<IEvent> poll_event() const = 0;
 };
 
 class SFMLEventHandler {
-	SFMLEvent create_event() override
+	// optional doesn't heap allocate like a pointer would, and heap allocation
+	// isn't necessary for in game loop events.
+	std::optional<IEvent> poll_event() const override
 	{
-		return sf::Event;
-	}
-	bool poll_event(SFMLEvent &event) const override
-	{
-		return _window->pollEvent(static_cast<sf::Event>(&event));
+	  	sf::Event event;
+		if (_window->pollEvent(&event)) {
+			return std::optional<SFMLEvent>(event);
+		}
+		return std::nullopt;
 	}
 };
 
 class SDLEventHandler {
-	SDLEvent create_event() override
+	std::optional<IEvent> poll_event() const override
 	{
-		return SDL_Event;
-	}
-	bool poll_event(SDL_Event event) const override
-	{
-		return SDL_PollEvent(static_cast<SDL_Event>(&event));
-			
+		SDL_Event event;
+		if (SDL_PollEvent(&event) != -1) {
+			return std::optional<SDLEvent>(event);
+		}
+		return std::nullopt;
 	}
 };
