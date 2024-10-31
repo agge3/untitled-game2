@@ -149,6 +149,12 @@ void World::load_map()
 
     m_textures.load(Textures::Grass, world + "new-grass.png");
 
+	/* xxx leaving for example, but this is a good place to have a texture
+	 * loader that (ideally from lua) calls all the textures and shoves them
+	 * into a data structure to iterate down. Also, avoiding this syntax
+	 * entirely and having some automated, populate from lua would be fantastic
+	 * and is the goal.
+
     m_textures.load(Textures::StudentUnion, world + "student-union.png");
     m_textures.load(Textures::CollegeCenter, world + "college-center.png");
     m_textures.load(Textures::CampusSafety, world + "campus-safety.png");
@@ -167,10 +173,11 @@ void World::load_map()
     m_textures.load(Textures::Baseball, world + "baseball.png");
     m_textures.load(Textures::Library, world + "college-center.png");
     m_textures.load(Textures::LewisCenter, world + "student-union.png");
-
     m_textures.load(Textures::Scenery, world + "grass-assets-transparent.png");
     m_textures.load(Textures::Scenery1, world + "grass-assets-transparent.png");
     m_textures.load(Textures::Scenery2, world + "grass-assets-transparent.png");
+
+	*/
 }
 
 void World::build_scene()
@@ -197,6 +204,7 @@ void World::build_scene()
     m_scene_layers[Background]->attach_child(std::move(background_sprite));
 
     // Add player character to the scene.
+	// xxx source player config from lua
     std::unique_ptr<Creature> player(new Creature(
                 Creature::Player, m_textures, m_fonts));
     m_player_creature = player.get();
@@ -217,6 +225,7 @@ void World::build_scene()
 void World::build_scenery()
 {
     // sf::IntRect(top, left, width, height)
+	// xxx this texture atlas should be defined in lua and read in.
     std::map<std::string, sf::IntRect> atlas {
         {"square_circle_trees", {0, 0, 999, 999}},
         {"square_triangle_trees", {1000, 0, 999, 999}},
@@ -252,242 +261,24 @@ void World::build_scenery()
     square_circle_trees->scale(0.5f, 0.5f);
     m_scene_layers[Background]->attach_child(std::move(square_circle_trees));
 
+	/* xxx leaving this in as an example of what needs to be done in lua and
+	 * heavily automated the unrolling
+
     std::unique_ptr<SpriteNode> medium_rock(new SpriteNode(
                 texture, atlas.find("medium_rock")->second));
     medium_rock->center_origin();
     medium_rock->setPosition(6049.f, 120.f);
     medium_rock->scale(0.5f, 0.5f);
     m_scene_layers[Background]->attach_child(std::move(medium_rock));
+	
+	*/
 
-    std::unique_ptr<SpriteNode> small_rock(new SpriteNode(
-                texture, atlas.find("small_rock")->second));
-    small_rock->center_origin();
-    small_rock->setPosition(5420.f, 2261.f);
-    small_rock->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(small_rock));
-
-    std::unique_ptr<SpriteNode> right_hedge(new SpriteNode(
-                texture, atlas.find("right_hedge")->second));
-    right_hedge->center_origin();
-    right_hedge->setPosition(4589.f, 172.f);
-    right_hedge->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(right_hedge));
-
-    std::unique_ptr<SpriteNode> big_rock(new SpriteNode(
-                texture, atlas.find("big_rock")->second));
-    big_rock->center_origin();
-    big_rock->setPosition(1611.f, 106.f);
-    big_rock->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(big_rock));
-
-    std::unique_ptr<SpriteNode> light_post(new SpriteNode(
-                texture, atlas.find("light_post")->second));
-    light_post->center_origin();
-    light_post->setPosition(217.f, 2940.f);
-    light_post->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(light_post));
-
-    std::unique_ptr<SpriteNode> big_fountain(new SpriteNode(
-                texture, atlas.find("big_fountain")->second));
-    big_fountain->center_origin();
-    big_fountain->setPosition(3261.f, 1369.f);
-    big_fountain->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(big_fountain));
-
-    std::unique_ptr<SpriteNode> circle_tree(new SpriteNode(
-                texture, atlas.find("circle_tree")->second));
-    circle_tree->center_origin();
-    circle_tree->setPosition(2414.f, 2535.f);
-    circle_tree->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(circle_tree));
-
-    std::unique_ptr<SpriteNode> benches(new SpriteNode(
-                texture, atlas.find("benches")->second));
-    benches->center_origin();
-    benches->setPosition(1870.f, 3036.f);
-    benches->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(benches));
-
-    std::unique_ptr<SpriteNode> nice_bench(new SpriteNode(
-                texture, atlas.find("nice_bench")->second));
-    nice_bench->center_origin();
-    nice_bench->setPosition(1078.f, 2612.f);
-    nice_bench->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(nice_bench));
-
-    std::unique_ptr<SpriteNode> square_triangle_trees(new SpriteNode(
-                texture, atlas.find("square_triangle_trees")->second));
-    square_triangle_trees->center_origin();
-    square_triangle_trees->setPosition(1166.f, 1611.f);
-    square_triangle_trees->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(square_triangle_trees));
-
-    std::unique_ptr<SpriteNode> bench(new SpriteNode(
-                texture, atlas.find("bench")->second));
-    bench->center_origin();
-    bench->setPosition(1765.f, 1727.f);
-    bench->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bench));
-
-    std::unique_ptr<SpriteNode> left_hedge(new SpriteNode(
-                texture, atlas.find("left_hedge")->second));
-    left_hedge->center_origin();
-    left_hedge->setPosition(4603.f, 1380.f);
-    left_hedge->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(left_hedge));
-
-    std::unique_ptr<SpriteNode> bushes(new SpriteNode(
-                texture, atlas.find("bushes")->second));
-    bushes->center_origin();
-    bushes->setPosition(5241.f, 302.f);
-    bushes->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bushes));
-
-    std::unique_ptr<SpriteNode> bush(new SpriteNode(
-                texture, atlas.find("bushes")->second));
-    bush->center_origin();
-    bush->setPosition(2319.f, 156.f);
-    bush->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bush));
-
-    std::unique_ptr<SpriteNode> triangle_tree(new SpriteNode(
-                texture, atlas.find("triangle_tree")->second));
-    triangle_tree->center_origin();
-    triangle_tree->setPosition(150.f, 1013.f);
-    triangle_tree->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(triangle_tree));
-
-    std::unique_ptr<SpriteNode> bridge(new SpriteNode(
-                texture, atlas.find("bridge")->second));
-    bridge->center_origin();
-    bridge->setPosition(777.f, 1103.f);
-    bridge->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bridge));
-
-    std::unique_ptr<SpriteNode> small_fountain(new SpriteNode(
-                texture, atlas.find("small_fountain")->second));
-    small_fountain->center_origin();
-    small_fountain->setPosition(6072.f, 1457.f);
-    small_fountain->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(small_fountain));
-
-    // Sprites for Textures::Scenery1 (second load):
-    sf::Texture& texture1 = m_textures.get(Textures::Scenery1);
-
-    std::unique_ptr<SpriteNode> big_fountain1(new SpriteNode(
-                texture1, atlas.find("big_fountain")->second));
-    big_fountain1->center_origin();
-    big_fountain1->setPosition(3586.f, 3234.f);
-    big_fountain1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(big_fountain1));
-
-    std::unique_ptr<SpriteNode> benches1(new SpriteNode(
-                texture1, atlas.find("benches")->second));
-    benches1->center_origin();
-    benches1->setPosition(4196.f, 2183.f);
-    benches1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(benches1));
-
-    std::unique_ptr<SpriteNode> square_triangle_trees1(new SpriteNode(
-                texture1, atlas.find("square_triangle_trees")->second));
-    square_triangle_trees1->center_origin();
-    square_triangle_trees1->setPosition(5042.f, 1151.f);
-    square_triangle_trees1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(square_triangle_trees1));
-
-    std::unique_ptr<SpriteNode> bridge1(new SpriteNode(
-                texture1, atlas.find("bridge")->second));
-    bridge1->center_origin();
-    bridge1->setPosition(1250.f, 970.f);
-    bridge1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bridge1));
-
-    std::unique_ptr<SpriteNode> circle_tree1(new SpriteNode(
-                texture1, atlas.find("circle_tree")->second));
-    circle_tree1->center_origin();
-    circle_tree1->setPosition(1595.f, 803.f);
-    circle_tree1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(circle_tree1));
-
-    std::unique_ptr<SpriteNode> nice_bench1(new SpriteNode(
-                texture1, atlas.find("nice_bench")->second));
-    nice_bench1->center_origin();
-    nice_bench1->setPosition(1096.f, 331.f);
-    nice_bench1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(nice_bench1));
-
-    std::unique_ptr<SpriteNode> left_hedge1(new SpriteNode(
-                texture1, atlas.find("left_hedge")->second));
-    left_hedge1->center_origin();
-    left_hedge1->setPosition(2338.f, 901.f);
-    left_hedge1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(left_hedge1));
-
-    std::unique_ptr<SpriteNode> light_post1(new SpriteNode(
-                texture1, atlas.find("light_post")->second));
-    light_post1->center_origin();
-    light_post1->setPosition(1645.f, 3296.f);
-    light_post1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(light_post1));
-
-    std::unique_ptr<SpriteNode> big_rock1(new SpriteNode(
-                texture1, atlas.find("big_rock")->second));
-    big_rock1->center_origin();
-    big_rock1->setPosition(1372.f, 1968.f);
-    big_rock1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(big_rock1));
-
-    std::unique_ptr<SpriteNode> right_hedge1(new SpriteNode(
-                texture1, atlas.find("right_hedge")->second));
-    right_hedge1->center_origin();
-    right_hedge1->setPosition(2668.f, 235.f);
-    right_hedge1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(right_hedge1));
-
-    std::unique_ptr<SpriteNode> small_fountain1(new SpriteNode(
-                texture1, atlas.find("small_fountain")->second));
-    small_fountain1->center_origin();
-    small_fountain1->setPosition(4162.f, 1171.f);
-    small_fountain1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(small_fountain1));
-
-    std::unique_ptr<SpriteNode> medium_rock1(new SpriteNode(
-                texture1, atlas.find("medium_rock")->second));
-    medium_rock1->center_origin();
-    medium_rock1->setPosition(6855.f, 2062.f);
-    medium_rock1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(medium_rock1));
-
-    std::unique_ptr<SpriteNode> small_rock1(new SpriteNode(
-                texture1, atlas.find("small_rock")->second));
-    small_rock1->center_origin();
-    small_rock1->setPosition(6133.f, 1772.f);
-    small_rock1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(small_rock1));
-
-    std::unique_ptr<SpriteNode> bushes1(new SpriteNode(
-                texture, atlas.find("bushes")->second));
-    bushes1->center_origin();
-    bushes1->setPosition(3895.f, 364.f);
-    bushes1->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bushes1));
-
-    // xxx set pos
-    //std::unique_ptr<SpriteNode> bush(new SpriteNode(
-    //            texture, atlas.find("bushes")->second));
-    //bush->center_origin();
-    //bush->setPosition(5241.f, 302.f);
-    //bush->scale(0.5f, 0.5f);
-    //m_scene_layers[Background]->attach_child(std::move(bush));
-
-    //std::unique_ptr<SpriteNode> bench4(new SpriteNode(
-    //            texture1, atlas.find("benches")->second));
-    //bench4->setPosition(5456.f, 2788.f);
-    //bench4->scale(0.5f, 0.5f);
-    //m_scene_layers[Background]->attach_child(std::move(bench4));
+    /* xxx same logic, what needs to be done in lua
 
     // Sprites for Textures::Scenery2 (third load):
-    sf::Texture& texture2 = m_textures.get(Textures::Scenery2);
+	// could perhaps load the 2nd atlases multiple times from lua, but pretty
+	// sure lua creates a better approach.
+    //sf::Texture& texture2 = m_textures.get(Textures::Scenery2);
 
     // pos already set!
     std::unique_ptr<SpriteNode> square_circle_trees2(new SpriteNode(
@@ -497,132 +288,9 @@ void World::build_scenery()
     square_circle_trees2->scale(0.5f, 0.5f);
     m_scene_layers[Background]->attach_child(std::move(square_circle_trees2));
 
-    // pos set now
-    std::unique_ptr<SpriteNode> square_triangle_trees2(new SpriteNode(
-                texture2, atlas.find("square_triangle_trees")->second));
-    square_triangle_trees2->center_origin();
-    square_triangle_trees2->setPosition(5743.f, 1872.f);
-    square_triangle_trees2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(square_triangle_trees2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> triangle_tree2(new SpriteNode(
-                texture2, atlas.find("triangle_tree")->second));
-    triangle_tree2->center_origin();
-    triangle_tree2->setPosition(3553.f, 697.f);
-    triangle_tree2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(triangle_tree2));
-
-    // pos already set!
-    std::unique_ptr<SpriteNode> big_fountain2(new SpriteNode(
-                texture2, atlas.find("big_fountain")->second));
-    big_fountain2->center_origin();
-    big_fountain2->setPosition(5605.f, 2621.f);
-    big_fountain2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(big_fountain2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> left_hedge2(new SpriteNode(
-                texture2, atlas.find("left_hedge")->second));
-    left_hedge2->center_origin();
-    left_hedge2->setPosition(6846.f, 1357.f);
-    left_hedge2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(left_hedge2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> circle_tree2(new SpriteNode(
-                texture2, atlas.find("circle_tree")->second));
-    circle_tree2->center_origin();
-    circle_tree2->setPosition(5948.f, 762.f);
-    circle_tree2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(circle_tree2));
-
-    // pos already set!
-    std::unique_ptr<SpriteNode> light_post2(new SpriteNode(
-                texture2, atlas.find("light_post")->second));
-    light_post2->center_origin();
-    light_post2->setPosition(999.f, 3181.f);
-    light_post2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(light_post2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> big_rock2(new SpriteNode(
-                texture2, atlas.find("big_rock")->second));
-    big_rock2->center_origin();
-    big_rock2->setPosition(6733.f, 316.f);
-    big_rock2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(big_rock2));
-
-    std::unique_ptr<SpriteNode> right_hedge2(new SpriteNode(
-                texture2, atlas.find("right_hedge")->second));
-    right_hedge2->center_origin();
-    right_hedge2->setPosition(2668.f, 235.f);
-    right_hedge2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(right_hedge2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> small_fountain2(new SpriteNode(
-                texture2, atlas.find("small_fountain")->second));
-    small_fountain2->center_origin();
-    small_fountain2->setPosition(6474.f, 3076.f);
-    small_fountain2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(small_fountain2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> bushes2(new SpriteNode(
-                texture2, atlas.find("bushes")->second));
-    bushes2->center_origin();
-    bushes2->setPosition(6773.f, 2613.f);
-    bushes2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bushes2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> bush2(new SpriteNode(
-                texture2, atlas.find("bushes")->second));
-    bush2->center_origin();
-    bush2->setPosition(5240.f, 3833.f);
-    bush2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bush2));
-
-    // pos already set!
-    std::unique_ptr<SpriteNode> benches2(new SpriteNode(
-                texture2, atlas.find("benches")->second));
-    benches2->center_origin();
-    benches2->setPosition(5249.f, 3096.f);
-    benches2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(benches2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> bench2(new SpriteNode(
-                texture2, atlas.find("bench")->second));
-    bench2->center_origin();
-    bench2->setPosition(6246.f, 3513.f);
-    bench2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(bench2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> nice_bench2(new SpriteNode(
-                texture2, atlas.find("nice_bench")->second));
-    nice_bench2->center_origin();
-    nice_bench2->setPosition(4875.f, 3252.f);
-    nice_bench2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(nice_bench2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> medium_rock2(new SpriteNode(
-                texture2, atlas.find("medium_rock")->second));
-    medium_rock2->center_origin();
-    medium_rock2->setPosition(4963.f, 4184.f);
-    medium_rock2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(medium_rock2));
-
-    // pos set now
-    std::unique_ptr<SpriteNode> small_rock2(new SpriteNode(
-                texture2, atlas.find("small_rock")->second));
-    small_rock2->center_origin();
-    small_rock2->setPosition(5741.f, 4113.f);
-    small_rock2->scale(0.5f, 0.5f);
-    m_scene_layers[Background]->attach_child(std::move(small_rock2));
+	// xxx need a way of defining layer attributes, or if that's relevant (in
+	// lua...)
+	*/
 }
 
 /**
@@ -638,6 +306,11 @@ void World::build_map()
     }
 }
 
+// xxx this seems like something that could be done in lua, also allows the
+// ability to define player movement differently based on states easier (e.g.,
+// STATE: move speed increase -> call different script). Potential analysis is
+// that the computations for player should not be scripted and just be in cpp
+// to avoid the interpreter (speed).
 void World::adapt_player_position()
 {
     /// Initialize view bounds to world view.
@@ -703,6 +376,7 @@ void World::adapt_player_position()
     //std::cout << "Player position: (" << pos.x << ", " << pos.y << ")\n";
 }
 
+// lua?
 void World::adapt_player_velocity()
 {
     sf::Vector2f velocity = m_player_creature->get_velocity();
@@ -722,6 +396,7 @@ void World::adapt_player_velocity()
  * @note Assumes m_npc_spawn_points is sorted in ascending order. Iterating
  * from lowest to highest coordinates is more likely to be the common case.
  */
+// xxx a lot of this unrolling should be parsing lua scripts
 void World::spawn_npcs()
 {
     /** @todo Decide on whether to implement world chunks or not.
@@ -800,6 +475,7 @@ void World::spawn_npcs()
  * reused.
  * @see add_npcs()
  */
+// xxx parse lua config and unroll
 void World::add_npc(Creature::Type type, sf::Vector2f& vec2_rel)
 {
     // spawn with enemy type, spawn pos + player pos -> to spawn rel to player
@@ -821,6 +497,7 @@ void World::add_npc(Creature::Type type, sf::Vector2f& vec2_rel)
  * @remark Does NOT SPAWN NPCs.
  * @see spawn_npcs().
  */
+// xxx parse lua config and unroll
 void World::add_npcs()
 {
     sf::Vector2f bunny_spawn{20.f, 50.f};
@@ -841,6 +518,8 @@ void World::add_npcs()
  * @warning NOT USED.
  * @todo Decide whether to implement chunk system or not?
  */
+// xxx cpp for sure, but there's probably nice interplay with lua (like define
+// memory config to optimize in lua and source it into here).
 void World::destroy_entities_outside_chunk()
 {
     /*

@@ -12,7 +12,6 @@ public:
 
 	void render() override;
 	void update();
-	void poll_event(const IEvent& e);
 	void is_open();
 	void close();
 	void clear();
